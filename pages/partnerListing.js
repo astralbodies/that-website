@@ -13,20 +13,53 @@ const RobotImage = styled.img`
   margin-right: 35px;
 `;
 
-const GET_SPONSORS = gql`
+const GET_PARTNERS = gql`
   query getPartners {
     partners {
       id
       year
+      partnershipLevel
       companyName
+      companyLogo
       heroImage
       website
     }
   }
 `;
 
-const becomeAPartner = props => {
-  const { loading, error, data } = useQuery(GET_SPONSORS);
+// const PartnerImageContainer = styled.img`
+//   background-color: #fafafa;
+// `;
+
+const PioneerImageContainer = styled.div`
+  height: 609px;
+  width: 387px;
+  // background-color: #fafafa;
+`;
+
+const PartnerLevelTitle = styled.h3`
+  margin-top: 0;
+  margin-bottom: 0;
+`;
+
+const renderPioneerPartner = partner => {
+  return (
+    <PioneerImageContainer key={partner.id}>
+      <img src={partner.companyLogo} alt={partner.companyName} />
+    </PioneerImageContainer>
+  );
+};
+
+const renderExplorerPartner = partner => {
+  return (
+    <div width={4} key={partner.id}>
+      <img src={partner.companyLogo} alt={partner.companyName} />
+    </div>
+  );
+};
+
+const partnerListing = props => {
+  const { loading, error, data } = useQuery(GET_PARTNERS);
 
   if (loading) return null;
   if (error) return null;
@@ -70,14 +103,35 @@ const becomeAPartner = props => {
         </Grid>
       </ContentSection>
       <ContentSection>
-        <ul>
-          {data.partners.map(value => {
-            return <li key={value.id}>{value.companyName}</li>;
-          })}
-        </ul>
+        <Grid columns={12}>
+          <Cell width={12} className="centered-text">
+            <PartnerLevelTitle>PIONEER PARTNERS</PartnerLevelTitle>
+          </Cell>
+          <Cell width={12} style={{ display: 'flex' }}>
+            {data.partners.map(value => {
+              if (value.partnershipLevel === 'PIONEER') {
+                return renderPioneerPartner(value);
+              }
+            })}
+          </Cell>
+        </Grid>
+      </ContentSection>
+      <ContentSection>
+        <Grid columns={12}>
+          <Cell width={12} className="centered-text">
+            <PartnerLevelTitle>EXPLORER PARTNERS</PartnerLevelTitle>
+          </Cell>
+          <Cell width={12} style={{ display: 'flex' }}>
+            {data.partners.map(value => {
+              if (value.partnershipLevel === 'EXPLORER') {
+                return renderExplorerPartner(value);
+              }
+            })}
+          </Cell>
+        </Grid>
       </ContentSection>
     </div>
   );
 };
 
-export default becomeAPartner;
+export default partnerListing;
