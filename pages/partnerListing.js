@@ -32,9 +32,9 @@ const GET_PARTNERS = gql`
 // `;
 
 const PioneerImageContainer = styled.div`
-  height: 609px;
+  //height: 609px;
   width: 387px;
-  // background-color: #fafafa;
+  background-color: #fafafa;
 `;
 
 const PartnerLevelTitle = styled.h3`
